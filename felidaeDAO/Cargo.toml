@@ -1,0 +1,39 @@
+[package]
+name = "felidaeDAO"
+version = "0.1.0"
+authors = ["[your_name] <[your_email]>"]
+edition = "2021"
+
+[dependencies]
+ink_primitives = { version = "3", default-features = false }
+ink_metadata = { version = "3", default-features = false, features = ["derive"], optional = true }
+ink_env = { version = "3", default-features = false }
+ink_storage = { version = "3", default-features = false }
+ink_lang = { version = "3", default-features = false }
+
+scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive"] }
+scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
+
+# define ownly
+ink_prelude = { version = "3", default-features = false}
+openbrush = {tag = "v2.2.0",  git = "https://github.com/Supercolony-net/openbrush-contracts", default-features = false, features = ["ownable", "psp35"] }
+dao_governance_token = { version = "0.1.0", path = "../dao_governance_token", default-features = false, features = ["ink-as-dependency"] }
+rustc-hex = { version="2.1.0", default-features = false }
+bs58 = { version = "0.4.0", default-features = false }
+sp-arithmetic = { version = "15", default-features = false }
+fixed ={version = "1.23",features = ["serde"]}
+
+[lib]
+name = "dao_contract"
+path = "lib.rs"
+crate-type = [
+	# Used for normal contract Wasm blobs.
+	"cdylib",
+    "rlib",
+]
+[profile.release]
+overflow-checks = false
+[features]
+default = ["std"]
+std = ["ink_metadata/std", "ink_env/std", "ink_storage/std", "ink_primitives/std", "scale/std", "scale-info/std", "ink_prelude/std", "openbrush/std", "rustc-hex/std", 'bs58/std',"sp-arithmetic/std"]
+ink-as-dependency = []
