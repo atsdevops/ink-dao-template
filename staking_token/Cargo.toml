@@ -1,0 +1,36 @@
+[package]
+name        = "dao_governance_token"
+description = "A contract for a PSP-22 token"
+version     = "0.1.0"
+authors     = ["[Ahmad Kaouk] <[ahmadkaouk.93@gmail.com]>"]
+edition     = "2021"
+
+[dependencies]
+ink        = { version = "4.1.0", default-features = false }
+openbrush  = { git = "https://github.com/727-Ventures/openbrush-contracts/", tag = "3.1.0", default-features = false, features = [ "psp22", ] }
+scale      = { package = "parity-scale-codec", version = "3", default-features = false, features = [ "derive", ] }
+scale-info = { version = "2.3", default-features = false, features = [ "derive", ], optional = true }
+
+[dev-dependencies]
+ink_e2e = "4.0.1"
+
+[lib]
+name       = "dao_governance_token"
+path       = "lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default           = ["std"]
+std               = ["ink/std", "scale/std", "scale-info/std", "openbrush/std"]
+ink-as-dependency = []
+e2e-tests = []
+
+[profile.release]
+panic = "abort"
+lto   = false
+
+[profile.dev]
+panic           = "abort"
+codegen-units   = 16
+lto             = false
+overflow-checks = false
