@@ -3,8 +3,6 @@
 
 #[openbrush::contract]
 mod felideaDAO {
-
-    
     use ink::prelude::string::{ ToString};
     use openbrush::traits::{String};
     use dao_governance_token::dao_governance_token::{DaoGovernanceToken, DaoGovernanceTokenRef};
@@ -1405,9 +1403,35 @@ mod felideaDAO {
             }                
             
             #[inline]
-            pub fn calculate_efficiency(&mut self, token_address: AccountId, to_address:AccountId, amount:u128) -> Result<()> {
+            pub fn calculate_efficiency(&mut self, member_address:AccountId) -> Result<Vec<(u16, u16)>> {
                 //TODO
-               Ok(())
+
+                //get member 
+                let member = match self.dao_member_list.get(&member_address) {
+                     Some(mem) =>  mem , 
+                     None => return Err(Error::NotAMember),
+                };
+
+                // (id,time)
+                let mut task_data :Vec<(u16, u16)> = Vec::new() ;
+                let task_list = member.task_list; 
+                for i in &task_list {
+
+                    let mut tasks = match  self.dao_task_list.get(&i) { 
+                        Some(task) => task, 
+                        None => continue,
+                    };
+                    let time_logged_in = match tasks.total_time_logged_in{
+                        Some(time ) => time, 
+                        None => 0,
+                    }; 
+                    task_data.push((*i, time_logged_in)) ; 
+
+                }
+
+
+
+               Ok(task_data)
                 
             }   
 
